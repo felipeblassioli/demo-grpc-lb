@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: greeter-client
+  name: greeter-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: greeter-client
+  template:
+    metadata:
+      labels:
+        run: greeter-client
+    spec:
+      containers:
+      - name: greeter-client
+        image: felipeblassioli/demo-grpc-lb:0.0.3
+        imagePullPolicy: Always
+        args:
+        - /bin/greeter_client
+        - greeter-server:8080

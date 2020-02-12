@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: greeter-server
+  name: greeter-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: greeter-server
+  template:
+    metadata:
+      labels:
+        run: greeter-server
+    spec:
+      containers:
+      - name: greeter-server
+        image: felipeblassioli/demo-grpc-lb:0.0.3
+        imagePullPolicy: Always
+        args:
+        - /bin/greeter_server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: greeter-server
+  name: greeter-server
+spec:
+  clusterIP: None
+  ports:
+  - name: grpc
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    run: greeter-server
+  type: ClusterIP
